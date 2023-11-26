@@ -1,0 +1,47 @@
+#include <DHT.h>
+#include <HX711_ADC.h>
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+HX711_ADC LoadCell;
+
+const int weightThreshold = 20000;
+const int buzzerPin = 8;
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  LoadCell.begin(A1, A0);
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  int weight = getWeight();
+
+  if (weight >= weightThreshold) {
+    digitalWrite(buzzerPin, HIGH);
+    Serial.println("Rice is dry! Alarm activated.");
+  } else {
+    digitalWrite(buzzerPin, LOW);
+    Serial.println("Rice is not dry.");
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C\tHumidity: ");
+  Serial.print(humidity);
+  Serial.print(" %\tWeight: ");
+  Serial.print(weight);
+  Serial.println(" g");
+
+  delay(2000);
+}
+
+int getWeight() {
+  return LoadCell.read();
+}
