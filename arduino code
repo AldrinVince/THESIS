@@ -1,0 +1,87 @@
+#include <HX711_ADC.h>
+#include <DHT_U.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <SQLite.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
+#define OLED_RESET    -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+HX711_ADC LoadCell;
+
+const int weightThreshold = 20000;
+const int buzzerPin = 8;
+
+SQLite db;
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  LoadCell.begin(A1, A0);
+  pinMode(buzzerPin, OUTPUT);
+
+  if (!display.begin(SSD1306_I2C_ADDRESS, OLED_RESET)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;);
+  }
+
+  display.display(); // clear the display
+  delay(2000);
+  display.clearDisplay();
+}
+
+void loop() {
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  int weight = getWeight();
+
+  if (weight >= weightThreshold) {
+    digitalWrite(buzzerPin, HIGH);
+    Serial.println("Rice is dry! Alarm activated.");
+  } else {
+    digitalWrite(buzzerPin, LOW);
+    Serial.println("Rice is not dry.");
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C\tHumidity: ");
+  Serial.print(humidity);
+  Serial.print(" %\tWeight: ");
+  Serial.print(weight);
+  Serial.println(" g");
+
+  logData(temperature, humidity);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,0);
+  display.print("Temp: ");
+  display.print(temperature);
+  display.print(" C");
+  display.setCursor(0, 10);
+  display.print("Humidity: ");
+  display.print(humidity);
+  display.print(" %");
+  display.display();
+
+  delay(2000);
+}
+
+int getWeight() {
+  return LoadCell.read();
+}
+
+void logData(float temperature, float humidity) {
+  db.query("INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)", temperature, humidity);
+}
