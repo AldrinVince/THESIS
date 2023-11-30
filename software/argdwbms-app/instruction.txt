@@ -1,0 +1,8 @@
+- open phpmyadmin
+- create a database
+- database name="project_argdwbms"
+- php artisan migrate
+
+run projects
+- php artisan serve
+- npm run dev
