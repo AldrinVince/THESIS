@@ -1,4 +1,6 @@
 - open phpmyadmin
+- open the project folder
+- left click gitbash here
 - create a database
 - database name="project_argdwbms"
 - php artisan migrate
