@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('temperature')->nullable();
             $table->integer('humidity')->nullable();
+            $table->integer('electricity_consumption')->nullable();
+            $table->integer('electricity_ampere')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

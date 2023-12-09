@@ -14,5 +14,7 @@ class Sensor extends Model
     protected $fillable = [
         'temperature',
         'humidity',
+        'electricity_consumption',
+        'electricity_ampere',
     ];
 }
