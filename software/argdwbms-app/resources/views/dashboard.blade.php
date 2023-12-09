@@ -79,6 +79,9 @@
                                 <li>
                                     <h5><i class="fa fa-circle mr-5 text-warning"></i>Data 3</h5>
                                 </li>
+                                <li>
+                                    <h5><i class="fa fa-circle mr-5 text-danger"></i>Data 3</h5>
+                                </li>
                             </ul>
                             <div id="area-chart3"></div>
                             <!-- <div id="charts_widget_43_chart"></div> -->
@@ -100,7 +103,9 @@
                             <div class="box overflow-hidden">
                                 <div class="box-body pb-0">
                                     <div>
-                                        <h2 class="text-white mb-0 font-weight-500">18.8k</h2>
+                                        <h2 class="text-white mb-0 font-weight-500">
+                                            {{ $currentMonthTemperature }}
+                                        </h2>
                                         <p class="text-mute mb-0 font-size-20">Temperature</p>
                                     </div>
                                 </div>
@@ -113,7 +118,9 @@
                             <div class="box overflow-hidden">
                                 <div class="box-body pb-0">
                                     <div>
-                                        <h2 class="text-white mb-0 font-weight-500">35.8k</h2>
+                                        <h2 class="text-white mb-0 font-weight-500">
+                                            {{ $currentMonthHumidity }}
+                                        </h2>
                                         <p class="text-mute mb-0 font-size-20">Humidity</p>
                                     </div>
                                 </div>

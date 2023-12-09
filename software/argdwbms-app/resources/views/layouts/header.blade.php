@@ -10,12 +10,7 @@
                 </a>
             </li>
             <li class="btn-group nav-item d-none d-xl-inline-block">
-                <a href="#" class="waves-effect waves-light nav-link rounded svg-bt-icon" title="">
-                    <i class="ti-check-box"></i>
-                </a>
-            </li>
-            <li class="btn-group nav-item d-none d-xl-inline-block">
-                <a href="calendar.html" class="waves-effect waves-light nav-link rounded svg-bt-icon" title="">
+                <a href="{{ route('calendar') }}" class="waves-effect waves-light nav-link rounded svg-bt-icon" title="">
                     <i class="ti-calendar"></i>
                 </a>
             </li>
@@ -99,7 +94,7 @@
           <!-- User Account-->
           <li class="dropdown user user-menu">
             <a href="#" class="waves-effect waves-light rounded dropdown-toggle p-0" data-toggle="dropdown" title="User">
-                <img src="../images/avatar/1.jpg" alt="">
+              <img class="rounded-circle header-profile-user" src="{{ Avatar::create(auth()->user()->name)->toBase64() }}" alt="Header Avatar">
             </a>
             <ul class="dropdown-menu animated flipInX">
               <li class="user-body">

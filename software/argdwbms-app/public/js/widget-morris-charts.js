@@ -13,50 +13,57 @@ $(function () {
             period: '2010',
             data1: 55,
             data2: 85,
-            data3: 25
+            data3: 25,
+            data4: 35,
         }, {
             period: '2011',
             data1: 135,
             data2: 105,
-            data3: 85
+            data3: 85,
+            data4: 5,
         }, {
             period: '2012',
             data1: 85,
             data2: 65,
-            data3: 75
+            data3: 75,
+            data4: 11,
         }, {
             period: '2013',
             data1: 75,
             data2: 205,
-            data3: 145
+            data3: 145,
+            data4: 35,
         }, {
             period: '2014',
             data1: 185,
             data2: 155,
-            data3: 145
+            data3: 145,
+            data4: 25,
         }, {
             period: '2015',
             data1: 110,
             data2: 105,
-            data3: 85
+            data3: 85,
+            data4: 3,
         },
          {
             period: '2016',
             data1: 255,
             data2: 155,
-            data3: 205
+            data3: 205,
+            data4: 1,
         }],
         xkey: 'period',
-        ykeys: ['data1', 'data2', 'data3'],
-        labels: ['Data 1', 'Data 2', 'Data 3'],
+        ykeys: ['data1', 'data2', 'data3', 'data4'],
+        labels: ['Temperature', 'Humidity', 'Voltage', 'Ampere'],
         pointSize: 3,
         fillOpacity: 0,
-        pointStrokeColors:['#0bb2d4', '#17b3a3', '#3e8ef7'],
+        pointStrokeColors:['#0bb2d4', '#17b3a3', '#3e8ef7', '#faa700'],
         behaveLikeLine: true,
         gridLineColor: '#e0e0e0',
         lineWidth: 3,
         hideHover: 'auto',
-        lineColors: ['#0bb2d4', '#17b3a3', '#3e8ef7'],
+        lineColors: ['#0bb2d4', '#17b3a3', '#3e8ef7', '#faa700'],
         resize: true
         
     });
@@ -211,55 +218,60 @@ Morris.Area({
  Morris.Area({
         element: 'area-chart3',
         data: [{
-                    period: '2013',
-                    data1: 0,
-                    data2: 0,
-                    data3: 0
-                }, {
-                    period: '2014',
-                    data1: 55,
-                    data2: 20,
-                    data3: 10
-                }, {
-                    period: '2015',
-                    data1: 25,
-                    data2: 55,
-                    data3: 70
-                }, {
-                    period: '2016',
-                    data1: 65,
-                    data2: 17,
-                    data3: 12
-                }, {
-                    period: '2017',
-                    data1: 35,
-                    data2: 25,
-                    data3: 125
-                }, {
-                    period: '2018',
-                    data1: 30,
-                    data2: 85,
-                    data3: 45
-                }, {
-                    period: '2019',
-                    data1: 15,
-                    data2: 15,
-                    data3: 15
-                }
-
-
-                ],
-                lineColors: ['#17b3a3', '#3e8ef7', '#faa700'],
-                xkey: 'period',
-                ykeys: ['data1', 'data2', 'data3'],
-                labels: ['Data 1', 'Data 2', 'Data 3'],
-                pointSize: 0,
-                lineWidth: 0,
-                resize:true,
-                fillOpacity: 0.8,
-                behaveLikeLine: true,
-                gridLineColor: '#e0e0e0',
-                hideHover: 'auto'
+            period: '2010',
+            data1: 55,
+            data2: 85,
+            data3: 25,
+            data4: 35,
+        }, {
+            period: '2011',
+            data1: 135,
+            data2: 105,
+            data3: 85,
+            data4: 5,
+        }, {
+            period: '2012',
+            data1: 85,
+            data2: 65,
+            data3: 75,
+            data4: 11,
+        }, {
+            period: '2013',
+            data1: 75,
+            data2: 205,
+            data3: 145,
+            data4: 35,
+        }, {
+            period: '2014',
+            data1: 185,
+            data2: 155,
+            data3: 145,
+            data4: 25,
+        }, {
+            period: '2015',
+            data1: 110,
+            data2: 105,
+            data3: 85,
+            data4: 3,
+        },
+         {
+            period: '2016',
+            data1: 255,
+            data2: 155,
+            data3: 205,
+            data4: 1,
+        }],
+        lineColors: ['#17b3a3', '#3e8ef7', '#faa700'],
+        xkey: 'period',
+        ykeys: ['data1', 'data2', 'data3', 'data4'],
+        labels: ['Temperature', 'Humidity', 'Voltage', 'Ampere'],
+        pointSize: 0,
+        lineWidth: 0,
+        resize:true,
+        fillOpacity: 0.8,
+        behaveLikeLine: true,
+        gridLineColor: '#e0e0e0',
+        hideHover: 'auto'
         
     });
 	

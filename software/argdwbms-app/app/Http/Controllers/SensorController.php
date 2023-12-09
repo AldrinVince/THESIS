@@ -37,4 +37,25 @@ class SensorController extends Controller
             dd($e);
         }
     }
+
+    public function calendar()
+    {
+        try {
+            $sensorTable = $this->sensorContract->getSensorTable();
+
+            $currentMonthTemperature = $this->sensorContract->getTotalMonthTemperature();
+            $currentMonthHumidity = $this->sensorContract->getTotalMonthHumidity();
+            $currentMonthElectricConsumption = $this->sensorContract->getTotalMonthElectricConsumption();
+
+            return view('calendar', [
+                'sensorTable' => $sensorTable,
+                'currentMonthTemperature' => $currentMonthTemperature,
+                'currentMonthHumidity' => $currentMonthHumidity,
+                'currentMonthElectricConsumption' => $currentMonthElectricConsumption,
+            ]);
+
+        } catch (Exception $e) {
+            dd($e);
+        }
+    }
 }

@@ -31,13 +31,18 @@
         <!-- Vendor JS -->
         <script src="{{ asset('js/vendors.min.js') }}"></script>
         <script src="{{ asset('assets/icons/feather-icons/feather.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor_components/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor_components/perfect-scrollbar-master/perfect-scrollbar.jquery.min.js') }}"></script>
         <script src="{{ asset('assets/vendor_components/raphael/raphael.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor_components/fullcalendar/lib/moment.min.js') }}"></script>
         <script src="{{ asset('assets/vendor_components/morris.js/morris.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor_components/fullcalendar/fullcalendar.min.js') }}"></script>
 
         <!-- Sunny Admin App -->
         <script src="{{ asset('js/widget-morris-charts.js') }}"></script>
         <script src="{{ asset('js/template.js') }}"></script>
-        <!-- <script src="{{ asset('js/dashboard.js') }}"></script> -->
+        <script src="{{ asset('js/dashboard.js') }}"></script>
+        <script src="{{ asset('js/calendar.js') }}"></script>
 
     </body>
 </html>

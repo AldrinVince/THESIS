@@ -30,4 +30,8 @@ Route::get('/dashboard', [SensorController::class, 'index'])
 ->middleware(['auth', 'verified'])
 ->name('dashboard');
 
+Route::get('/calendar', [SensorController::class, 'calendar'])
+->middleware(['auth', 'verified'])
+->name('calendar');
+
 require __DIR__.'/auth.php';
