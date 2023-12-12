@@ -69,22 +69,7 @@
                             </h4>
                         </div>
                         <div class="box-body py-0">
-                            <ul class="list-inline text-center mt-40">
-                                <li>
-                                    <h5><i class="fa fa-circle mr-5 text-primary"></i>Humidity 1</h5>
-                                </li>
-                                <li>
-                                    <h5><i class="fa fa-circle mr-5 text-success"></i>Temparature</h5>
-                                </li>
-                                <li>
-                                    <h5><i class="fa fa-circle mr-5 text-warning"></i>Electric Consumption</h5>
-                                </li>
-                                <li>
-                                    <h5><i class="fa fa-circle mr-5 text-danger"></i>Ampere</h5>
-                                </li>
-                            </ul>
                             <div id="chart-live-reports"></div>
-                            <!-- <div id="charts_widget_43_chart"></div> -->
                         </div>
                     </div>
                 </div>
@@ -144,7 +129,7 @@
     <div class="control-sidebar-bg"></div>
 
     @push('scripts')
-        <script>
+        {{-- <script>
             var sensorData = @json($sensorData);
 
             var humiditySeries = {
@@ -305,6 +290,91 @@
                     new Date('27 Feb 2013').getTime()
                 )
             })
+        </script> --}}
+        <script>
+            var sensorData = @json($sensorData);
+            var humiditySeries = {
+                name: 'Humidity',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->humidity }}],
+                    @endforeach
+                ]
+            };
+            var temperatureSeries = {
+                name: 'Temperature',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->temperature }}],
+                    @endforeach
+                ]
+            };
+            var electricityConsumptionSeries = {
+                name: 'Electric Consumption',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->electricity_consumption }}],
+                    @endforeach
+                ]
+            };
+            var ampereSeries = {
+                name: 'Ampere',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->electricity_ampere }}],
+                    @endforeach
+                ]
+            };
+            var series = [humiditySeries, temperatureSeries, electricityConsumptionSeries, ampereSeries];
+            var options = {
+                series: series,
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    stacked: true,
+                    events: {
+                        selection: function(chart, e) {
+                            console.log(new Date(e.xaxis.min))
+                        }
+                    },
+                },
+                colors: ['#007bff', '#27a745', '#ffc001', '#ed7b7c'],
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        opacityFrom: 0.6,
+                        opacityTo: 0.8,
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'left',
+                    style: {
+                        colors: '#fff',
+                    },
+                },
+                xaxis: {
+                    type: 'datetime',
+                    style: {
+                        colors: '#fff',
+                    },
+                },
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 'bold',
+                    colors: '#fff',
+                },
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart-live-reports"), options);
+            chart.render();
         </script>
     @endpush
 

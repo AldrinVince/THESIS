@@ -85,4 +85,26 @@ class SensorRepository implements SensorContract {
         ->groupBy('created_at')
         ->get();
     }
+
+    public function getDailyActualData()
+    {
+        $data = $this->model->get();
+        $grouped = $data->groupBy(function ($item) {
+            return Carbon::parse($item->created_at)->format('Y-m-d');
+        })->map(function ($group) {
+            return $group->reduce(function ($carry, $item) {
+                $carry['temperature'] += $item->temperature;
+                $carry['humidity'] += $item->humidity;
+                $carry['electricity_ampere'] += $item->electricity_ampere;
+                $carry['electricity_consumption'] += $item->electricity_consumption;
+                return $carry;
+            }, [
+                'temperature' => 0,
+                'humidity' => 0,
+                'electricity_ampere' => 0,
+                'electricity_consumption' => 0,
+            ]);
+        });
+        return $grouped;
+    }
 }

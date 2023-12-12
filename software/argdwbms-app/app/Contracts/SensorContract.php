@@ -10,4 +10,5 @@ interface SensorContract {
     public function getTotalMonthElectricConsumption();
     public function getCurrentMonthTemperature();
     public function getActualSensorData();
+    public function getDailyActualData();
 }

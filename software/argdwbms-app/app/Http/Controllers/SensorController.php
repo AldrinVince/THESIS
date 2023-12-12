@@ -49,11 +49,14 @@ class SensorController extends Controller
             $currentMonthHumidity = $this->sensorContract->getTotalMonthHumidity();
             $currentMonthElectricConsumption = $this->sensorContract->getTotalMonthElectricConsumption();
 
+            $sensorData = $this->sensorContract->getDailyActualData();
+
             return view('calendar', [
                 'sensorTable' => $sensorTable,
                 'currentMonthTemperature' => $currentMonthTemperature,
                 'currentMonthHumidity' => $currentMonthHumidity,
                 'currentMonthElectricConsumption' => $currentMonthElectricConsumption,
+                'sensorData' => $sensorData,
             ]);
 
         } catch (Exception $e) {
