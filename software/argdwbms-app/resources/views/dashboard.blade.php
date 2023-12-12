@@ -20,7 +20,7 @@
                                     <small class="text-success">
                                         <i class="fa fa-caret-up"></i>
                                         +2.5%</small>
-                                    </h3>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                             <div>
                                 <p class="text-mute mt-20 mb-0 font-size-16">Humidity</p>
                                 <h3 class="text-white mb-0 font-weight-500">
-                                   {{ $currentMonthHumidity }}
+                                    {{ $currentMonthHumidity }}
                                     <small class="text-danger">
                                         <i class="fa fa-caret-down"></i>
                                         -0.5%
@@ -53,9 +53,9 @@
                             <div>
                                 <p class="text-mute mt-20 mb-0 font-size-16">Electricity Consumption</p>
                                 <h3 class="text-white mb-0 font-weight-500">
-                                    {{ $currentMonthElectricConsumption }} 
-                                    <small class="text-danger"><i class="fa fa-caret-up"></i> 
-                                    -1.5%</small>
+                                    {{ $currentMonthElectricConsumption }}
+                                    <small class="text-danger"><i class="fa fa-caret-up"></i>
+                                        -1.5%</small>
                                 </h3>
                             </div>
                         </div>
@@ -71,19 +71,19 @@
                         <div class="box-body py-0">
                             <ul class="list-inline text-center mt-40">
                                 <li>
-                                    <h5><i class="fa fa-circle mr-5 text-success"></i>Data 1</h5>
+                                    <h5><i class="fa fa-circle mr-5 text-primary"></i>Humidity 1</h5>
                                 </li>
                                 <li>
-                                    <h5><i class="fa fa-circle mr-5 text-info"></i>Data 2</h5>
+                                    <h5><i class="fa fa-circle mr-5 text-success"></i>Temparature</h5>
                                 </li>
                                 <li>
-                                    <h5><i class="fa fa-circle mr-5 text-warning"></i>Data 3</h5>
+                                    <h5><i class="fa fa-circle mr-5 text-warning"></i>Electric Consumption</h5>
                                 </li>
                                 <li>
-                                    <h5><i class="fa fa-circle mr-5 text-danger"></i>Data 3</h5>
+                                    <h5><i class="fa fa-circle mr-5 text-danger"></i>Ampere</h5>
                                 </li>
                             </ul>
-                            <div id="area-chart3"></div>
+                            <div id="chart-live-reports"></div>
                             <!-- <div id="charts_widget_43_chart"></div> -->
                         </div>
                     </div>
@@ -142,4 +142,170 @@
 
     <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
+
+    @push('scripts')
+        <script>
+            var sensorData = @json($sensorData);
+
+            var humiditySeries = {
+                name: 'Humidity',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->humidity }}],
+                    @endforeach
+                ]
+            };
+            var temperatureSeries = {
+                name: 'Temperature',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->temperature }}],
+                    @endforeach
+                ]
+            };
+            var electricityConsumptionSeries = {
+                name: 'Electric Consumption',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->electricity_consumption }}],
+                    @endforeach
+                ]
+            };
+            var ampereSeries = {
+                name: 'Ampere',
+                data: [
+                    @foreach ($sensorData as $data)
+                        [new Date('{{ $data->created_at }}').getTime(), {{ $data->electricity_ampere }}],
+                    @endforeach
+                ]
+            };
+            var series = [humiditySeries, temperatureSeries, electricityConsumptionSeries, ampereSeries];
+            var options = {
+                series: series,
+                chart: {
+                    id: 'area-datetime',
+                    type: 'area',
+                    height: 350,
+                    zoom: {
+                        autoScaleYaxis: true
+                    }
+                },
+                annotations: {
+                    yaxis: [{
+                        y: 30,
+                        borderColor: '#999',
+                        label: {
+                            show: true,
+                            text: 'Support',
+                            style: {
+                                color: "#fff",
+                                background: '#00E396'
+                            }
+                        }
+                    }],
+                    xaxis: [{
+                        x: new Date('14 Jan 2012').getTime(),
+                        borderColor: '#999',
+                        yAxisIndex: 0,
+                        label: {
+                            show: true,
+                            text: 'Rally',
+                            style: {
+                                color: "#fff",
+                                background: '#775DD0'
+                            }
+                        }
+                    }]
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                markers: {
+                    size: 0,
+                    style: 'hollow',
+                },
+                xaxis: {
+                    type: 'datetime',
+                    min: new Date('01 Mar 2012').getTime(),
+                    tickAmount: 6,
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.9,
+                        stops: [0, 100]
+                    }
+                },
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart-live-reports"), options);
+            chart.render();
+
+            var resetCssClasses = function(activeEl) {
+                var els = document.querySelectorAll('button')
+                Array.prototype.forEach.call(els, function(el) {
+                    el.classList.remove('active')
+                })
+
+                activeEl.target.classList.add('active')
+            }
+
+            document
+                .querySelector('#one_month')
+                .addEventListener('click', function(e) {
+                    resetCssClasses(e)
+
+                    chart.zoomX(
+                        new Date('28 Jan 2013').getTime(),
+                        new Date('27 Feb 2013').getTime()
+                    )
+                })
+
+            document
+                .querySelector('#six_months')
+                .addEventListener('click', function(e) {
+                    resetCssClasses(e)
+
+                    chart.zoomX(
+                        new Date('27 Sep 2012').getTime(),
+                        new Date('27 Feb 2013').getTime()
+                    )
+                })
+
+            document
+                .querySelector('#one_year')
+                .addEventListener('click', function(e) {
+                    resetCssClasses(e)
+                    chart.zoomX(
+                        new Date('27 Feb 2012').getTime(),
+                        new Date('27 Feb 2013').getTime()
+                    )
+                })
+
+            document.querySelector('#ytd').addEventListener('click', function(e) {
+                resetCssClasses(e)
+
+                chart.zoomX(
+                    new Date('01 Jan 2013').getTime(),
+                    new Date('27 Feb 2013').getTime()
+                )
+            })
+            document.querySelector('#all').addEventListener('click', function(e) {
+                resetCssClasses(e)
+
+                chart.zoomX(
+                    new Date('23 Jan 2012').getTime(),
+                    new Date('27 Feb 2013').getTime()
+                )
+            })
+        </script>
+    @endpush
+
 </x-app-layout>

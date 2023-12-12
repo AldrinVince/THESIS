@@ -63,11 +63,26 @@ class SensorRepository implements SensorContract {
     {
         return $this->model
             ->select(
-                DB::raw('DATE(created_at) as date'), 
+                DB::raw('DATE(created_at) as date'),
                 DB::raw('SUM(temperature) as sum_temperature')
             )
             ->whereRaw('MONTH(created_at) = MONTH(CURRENT_DATE())')
             ->groupBy(DB::raw('DATE(created_at)'))
             ->get();
+    }
+
+    public function getActualSensorData()
+    {
+        return $this->model
+        ->selectRaw(
+            'created_at,
+            AVG(temperature) as temperature,
+            AVG(humidity) as humidity,
+            AVG(electricity_consumption) as electricity_consumption,
+            AVG(electricity_ampere) as electricity_ampere'
+        )
+        ->orderBy('created_at', 'asc')
+        ->groupBy('created_at')
+        ->get();
     }
 }
