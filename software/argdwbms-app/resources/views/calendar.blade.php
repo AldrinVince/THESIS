@@ -1,4 +1,27 @@
 <x-app-layout>
+    @push('styles')
+        <style>
+            .temperature-event {
+                background-color: #27a745;
+                text-align: start;
+            }
+
+            .humidity-event {
+                background-color: #007bff;
+                text-align: start;
+            }
+
+            .electricity-consumption-event {
+                background-color: #ffc001;
+                text-align: start;
+            }
+
+            .electricity-ampere-event {
+                background-color: #ed7b7c;
+                text-align: start;
+            }
+        </style>
+    @endpush
 
     @include('layouts.header')
 
@@ -7,47 +30,18 @@
         <!-- Main content -->
         <section class="content" style="padding-top:100px;">
             <div class="row">
-			  <div class="col-12">
-  				<div class="box">
-  					<div class="box-body">
-  						<div class="row">
-  							<div class="col-xl-9 col-lg-8 col-12">	
-  								<div id="calendar"></div>
-  							</div>
-  							<div class="col-xl-3 col-lg-4 col-12">
-  								<div class="box no-border no-shadow">
-  									<div class="box-header with-border">
-  									  <h4 class="box-title">Draggable Events</h4>
-  									</div>
-  									<div class="box-body p-0">
-  									  <!-- the events -->
-  									  <div id="external-events">
-  										<div class="external-event m-15 bg-primary" data-class="bg-primary"><i class="fa fa-hand-o-right"></i>Lunch</div>
-  										<div class="external-event m-15 bg-warning" data-class="bg-warning"><i class="fa fa-hand-o-right"></i>Go home</div>
-  										<div class="external-event m-15 bg-info" data-class="bg-info"><i class="fa fa-hand-o-right"></i>Do homework</div>
-  										<div class="external-event m-15 bg-success" data-class="bg-success"><i class="fa fa-hand-o-right"></i>Work on UI design</div>
-  										<div class="external-event m-15 bg-danger" data-class="bg-danger"><i class="fa fa-hand-o-right"></i>Sleep tight</div>
-  									  </div>
-  									  <div class="event-fc-bt mx-15 my-20">
-  										<!-- checkbox -->
-  										<div class="checkbox">
-  											<input id="drop-remove" type="checkbox">
-  											<label for="drop-remove">
-  												Remove after drop
-  											</label>
-  										</div>
-  										<a href="#" data-toggle="modal" data-target="#add-new-events" class="btn btn-rounded btn-success btn-block my-10">
-  											<i class="ti-plus"></i> Add New Event
-  										</a>
-  									  </div>
-  								   </div>
-  							  </div>								
-  							</div>
-  						</div>
-  					</div>
-  				</div>  
-			  </div>  
-			</div>
+                <div class="col-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-12">
+                                    <div id="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
         <!-- /.content -->
     </div>
@@ -58,4 +52,77 @@
 
     <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
+
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                var sensorData = @json($sensorData);
+
+                console.log("sensorData", sensorData);
+
+                var SITEURL = "{{ url('/calendar') }}";
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                var events = [];
+
+                for (var date in sensorData) {
+                    if (sensorData.hasOwnProperty(date)) {
+                        var data = sensorData[date];
+
+                        events.push({
+                            title: 'Temperature: ' + data.temperature,
+                            start: date,
+                            end: date,
+                            allDay: true,
+                            className: 'temperature-event',
+                        });
+
+                        events.push({
+                            title: 'Humidity: ' + data.humidity,
+                            start: date,
+                            end: date,
+                            allDay: true,
+                            className: 'humidity-event',
+                        });
+
+                        events.push({
+                            title: 'Electric: ' + data.electricity_consumption,
+                            start: date,
+                            end: date,
+                            allDay: true,
+                            className: 'electricity-consumption-event',
+                        });
+
+                        events.push({
+                            title: 'Ampere: ' + data.electricity_ampere,
+                            start: date,
+                            end: date,
+                            allDay: true,
+                            className: 'electricity-ampere-event',
+                        });
+                    }
+                }
+
+                var calendar = $('#calendar').fullCalendar({
+                    editable: false,
+                    events: events,
+                    displayEventTime: false,
+                    eventRender: function(event, element, view) {
+                        if (event.allDay === 'true' || event.allDay === true) {
+                            event.allDay = true;
+                        } else {
+                            event.allDay = false;
+                        }
+                    },
+                    selectable: true,
+                    selectHelper: true,
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

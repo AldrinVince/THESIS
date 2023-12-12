@@ -17,9 +17,18 @@
 
     @stack('styles')
 
+    @livewireStyles
+
     <!-- Style-->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/skin_color.css') }}">
+    <script src="{{ asset('assets/vendor_components/fullcalendar/fullcalendar.min.css') }}"></script>
+
+    <style>
+        .apexcharts-legend-text {
+            color: #fff !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition dark-skin sidebar-mini theme-primary fixed">
@@ -45,9 +54,11 @@
     <!-- Sunny Admin App -->
     <script src="{{ asset('js/template.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
-    <script src="{{ asset('js/calendar.js') }}"></script>
+    {{-- <script src="{{ asset('js/calendar.js') }}"></script> --}}
 
     @stack('scripts')
+
+    @livewireScripts
 
 </body>
 
