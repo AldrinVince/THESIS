@@ -1,53 +1,52 @@
 #!/usr/bin/env bash
-#By juchipilo
-#Configure these two variables
+
+# By juchipilo
+# Configure these two variables
 MYUSER="admin"
 APACHEGROUP="www-data"
 
-SCRIPTPATH=`pwd -P`
-BOOTSTRAP="$SCRIPTPATH/bootstrap/"
-BOOTSTRAPCACHE="$SCRIPTPATH/bootstrap/cache/"
-STORAGE="$SCRIPTPATH/storage"
-LOGS="$STORAGE/logs"
+SCRIPTPATH=$(pwd -P)
+BOOTSTRAP="${SCRIPTPATH}/bootstrap/"
+BOOTSTRAPCACHE="${SCRIPTPATH}/bootstrap/cache/"
+STORAGE="${SCRIPTPATH}/storage"
+LOGS="${STORAGE}/logs"
 
-#add my user to the web server group
-sudo usermod -a -G ${APACHEGROUP} ${MYUSER}
+# Add my user to the web server group
+sudo usermod -a -G "${APACHEGROUP}" "${MYUSER}"
 
-#make www-data own everything in the directory
-sudo chown -R ${MYUSER}:${APACHEGROUP} ${SCRIPTPATH}
+# Make www-data own everything in the directory
+sudo chown -R "${MYUSER}:${APACHEGROUP}" "${SCRIPTPATH}"
 
-#change permissions on files to 644
-sudo find ${SCRIPTPATH} -type f -exec chmod 0644 {} \;
+# Change permissions on files to 644
+sudo find "${SCRIPTPATH}" -type f -exec chmod 0644 {} \;
 
-#change permissions on directories to 755
-sudo find ${SCRIPTPATH} -type d -exec chmod 0755 {} \;
+# Change permissions on directories to 755
+sudo find "${SCRIPTPATH}" -type d -exec chmod 0755 {} \;
 
-#if i have any bash scripts in there, make them executable
-sudo find ${SCRIPTPATH} -type f -iname "*.sh" -exec chmod +x {} \;
+# If there are any bash scripts, make them executable
+sudo find "${SCRIPTPATH}" -type f -iname "*.sh" -exec chmod +x {} \;
 
-if test ! -d "$BOOTSTRAPCACHE"
-then
- MKDIRCOMMAND=`mkdir -p ${BOOTSTRAPCACHE}`
- $MKDIRCOMMAND
+# Create bootstrap/cache directory if not exists
+if [ ! -d "${BOOTSTRAPCACHE}" ]; then
+    mkdir -p "${BOOTSTRAPCACHE}"
 fi
 
-chown ${MYUSER}:${APACHEGROUP} ${BOOTSTRAP}
-chown ${MYUSER}:${APACHEGROUP} ${BOOTSTRAPCACHE}
-chmod 0775 ${BOOTSTRAPCACHE}
+# Set ownership and permissions for bootstrap/cache
+chown "${MYUSER}:${APACHEGROUP}" "${BOOTSTRAP}" "${BOOTSTRAPCACHE}"
+chmod 0775 "${BOOTSTRAPCACHE}"
 
-if [ -f ${SCRIPTPATH}/bootstrap/cache/services.php ];
-then
- chmod 0664 ${SCRIPTPATH}/bootstrap/cache/services.php
+# If services.php exists, set its permissions
+if [ -f "${SCRIPTPATH}/bootstrap/cache/services.php" ]; then
+    chmod 0664 "${SCRIPTPATH}/bootstrap/cache/services.php"
 fi
 
-if [ ! -d ${SCRIPTPATH}/storage ]; then
- mkdir -p ${SCRIPTPATH}/storage
+# Create storage directory if not exists
+if [ ! -d "${SCRIPTPATH}/storage" ]; then
+    mkdir -p "${SCRIPTPATH}/storage"
 fi
 
-STORAGEFIXCOMMAND=`chown -R ${MYUSER}:${APACHEGROUP}
-${SCRIPTPATH}/storage`
-$STORAGEFIXCOMMAND
+# Set ownership and permissions for storage
+chown -R "${MYUSER}:${APACHEGROUP}" "${SCRIPTPATH}/storage"
+chmod -R 0775 "${STORAGE}"
 
-chmod -R 0775 ${STORAGE}
-echo 'Permisos establecidos correctamente'
-
+echo 'Success'
