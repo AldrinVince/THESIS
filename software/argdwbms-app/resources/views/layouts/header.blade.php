@@ -120,7 +120,12 @@
                             <a class="dropdown-item" href="#"><i class="ti-settings text-muted mr-2"></i>
                                 Settings</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#"><i class="ti-lock text-muted mr-2"></i> Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="ti-lock text-muted mr-2"></i> Logout
+                            </a>
                         </li>
                     </ul>
                 </li>
